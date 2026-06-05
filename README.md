@@ -1,6 +1,6 @@
 # 📘 UX Figma Workflow — คู่มือการใช้งาน
 
-> อัปเดตล่าสุด: 2026-05-14
+> อัปเดตล่าสุด: 2026-06-05
 
 **ติดตั้งครั้งแรก** → ดู [SETUP.md](SETUP.md)
 
@@ -16,20 +16,35 @@ UX Figma Workflow/
 │
 ├── .claude/
 │   ├── agents/
-│   │   ├── ux-researcher.md         ← Stage 1–2: Research, Synthesis
-│   │   ├── ux-producer.md           ← Stage 3–5: Prototype, Shell, Feature loop
-│   │   ├── ux-auditor.md            ← Stage 6: Quality gates (WCAG, Layout, Heuristic)
-│   │   └── figma-publisher.md       ← Figma pipeline: Design System, Screens, Code Connect
+│   │   ├── ux-researcher.md         ← Stage 1–4: BA → NLM+Perplexity → Synthesis → Site Map
+│   │   ├── ux-producer.md           ← Stage 5–6: React Shell → Feature Loop
+│   │   ├── ux-auditor.md            ← Stage 6B: 7-point audit ก่อน deliver
+│   │   ├── figma-publisher.md       ← Stage 7 (optional): push tokens/screens เข้า Figma
+│   │   └── ds-publisher.md          ← Stage 8–9: Design System deliverable + token sync
 │   │
 │   ├── commands/
-│   │   ├── ux-figma-pipeline.md     ← Pipeline หลัก (Stage 1→6)
-│   │   ├── figma-pipeline.md        ← Prototype → Figma (Design System + Key Screens)
+│   │   ├── ux-figma-pipeline.md     ← Pipeline หลัก (Stage 1–7)
+│   │   ├── figma-pipeline.md        ← Figma push (thin wrapper → figma-publisher agent)
+│   │   ├── design-system-pipeline.md← Stage 8–9: DS deliverable + token 2-way sync
 │   │   └── skills/                  ← Skill commands (/skills:name)
 │   │       ├── nlm-ask.md           ← Quick ask NotebookLM 1 ข้อ
 │   │       ├── nlm-batch-research.md← Batch ask ทุกคำถามอัตโนมัติ
+│   │       ├── plx-ask.md           ← Perplexity single question
+│   │       ├── plx-batch-research.md← Perplexity batch (ทุกคำถามใน plx-questions)
+│   │       ├── plx-competitive.md   ← Competitor landscape scan
+│   │       ├── plx-regulation.md    ← Compliance / regulation research
+│   │       ├── ds-extract.md        ← Extract design tokens + components
+│   │       ├── ds-cards.md          ← Component Cards (Markdown + screenshot)
+│   │       ├── ds-overview.md       ← Single-page HTML gallery
+│   │       ├── ds-handoff.md        ← Dev Handoff Package
+│   │       ├── ds-push-figma.md     ← Push DS เข้า Figma section
+│   │       ├── ds-pull-tokens.md    ← Pull tokens Figma → code
+│   │       ├── ds-push-tokens.md    ← Push tokens code → Figma
 │   │       ├── component-library.md ← สร้าง/อัปเดต component library
 │   │       ├── screen-factory.md    ← เพิ่ม screens อย่างเร็ว
 │   │       ├── user-flow.md         ← User Flow Diagram + Screen Inventory
+│   │       ├── microcopy.md         ← Thai UX copy + tone-of-voice
+│   │       ├── handoff-notes.md     ← Dev handoff annotations
 │   │       ├── wcag-audit.md        ← ตรวจ Accessibility WCAG 2.1 AA
 │   │       ├── design-crit.md       ← Heuristic Evaluation (Nielsen's 10)
 │   │       ├── layout-review.md     ← Audit Sidebar/Topbar/Breadcrumb
@@ -55,7 +70,8 @@ UX Figma Workflow/
         ├── 03-design/
         ├── 04-figma/
         ├── 05-prototype/            ← React app (npm run dev)
-        └── 06-export/               ← Single-file HTML export
+        ├── 06-export/               ← Single-file HTML export
+        └── 07-design-system/        ← Stage 8–9 (optional, post-audit)
 ```
 
 ---
@@ -64,8 +80,9 @@ UX Figma Workflow/
 
 | Tool | ใช้ทำอะไร | Setup |
 |------|-----------|-------|
-| **Figma MCP** | ดึง/สร้าง design, extract tokens, Code Connect | SETUP.md Step 5 |
-| **notebooklm-py** | Auto-research จาก source docs | SETUP.md Step 4 |
+| **Figma MCP** | ดึง/สร้าง design, extract tokens, Code Connect | SETUP.md Step 6 |
+| **notebooklm-py** | Auto-research จาก source docs (internal) | SETUP.md Step 4 |
+| **Perplexity MCP** | External research — competitors, regulation, web | SETUP.md Step 5 |
 | **Playwright MCP** | Browser automation, screenshot | optional |
 
 ### NotebookLM CLI
@@ -103,36 +120,45 @@ projects/[name]/01-brief/brief.md
 ┌─────────────────────────────────────────────────────────┐
 │ STAGE 1   UX Researcher                                 │
 │ Brief → BA Analysis → UX Idea Card                      │
-│ /skills:nlm-ask → ai-answers-[name].txt                 │
+│ สร้าง NLM questions + Perplexity questions              │
 └────────────────────────┬────────────────────────────────┘
                          ↓
+         ┌───────────────┴──────────────────┐
+         ↓ (parallel)                       ↓ (parallel)
+┌────────────────────┐           ┌──────────────────────┐
+│ STAGE 2A           │           │ STAGE 2B             │
+│ UX Researcher      │           │ UX Researcher        │
+│ Internal Research  │           │ External Research    │
+│ /skills:nlm-batch  │           │ /skills:plx-batch    │
+│ NLM → answers      │           │ Perplexity → answers │
+└────────────────────┘           └──────────────────────┘
+         └───────────────┬──────────────────┘
+                         ↓
 ┌─────────────────────────────────────────────────────────┐
-│ STAGE 2   UX Researcher                                 │
-│ /skills:nlm-batch-research → Synthesis                  │
-│ Research Doc → Narrative Critique                       │
+│ STAGE 3   UX Researcher                                 │
+│ Synthesis → Research Doc → Narrative Critique           │
 │ ✅ Gate: "Verified & Approved"                          │
 └────────────────────────┬────────────────────────────────┘
                          ↓
 ┌─────────────────────────────────────────────────────────┐
-│ STAGE 3   UX/UI Producer                                │
-│ Site Map → Screen Inventory                             │
-│ /skills:user-flow                                       │
+│ STAGE 4   UX Researcher                                 │
+│ Site Map → Screen Inventory → /skills:user-flow         │
 └────────────────────────┬────────────────────────────────┘
                          ↓
 ┌─────────────────────────────────────────────────────────┐
-│ STAGE 4   UX/UI Producer                                │
+│ STAGE 5   UX/UI Producer                                │
 │ React Shell + /skills:component-library init            │
 │ Design tokens → Router → Layout                         │
 └────────────────────────┬────────────────────────────────┘
                          ↓
 ┌─────────────────────────────────────────────────────────┐
-│ STAGE 5   UX/UI Producer                                │
-│ /skills:nlm-ask (wireframe) → /skills:screen-factory    │
+│ STAGE 6   UX/UI Producer                                │
+│ Wireframe Analysis Gate → /skills:screen-factory        │
 │ /frontend-design (implement) → loop ทุก feature         │
 └────────────────────────┬────────────────────────────────┘
                          ↓
 ┌─────────────────────────────────────────────────────────┐
-│ STAGE 6   UX/UI Auditor                                 │
+│ STAGE 6B  UX/UI Auditor                                 │
 │ /skills:layout-review → /skills:wcag-audit              │
 │ /skills:design-crit → audit-report-[name].md            │
 │ /skills:export-prototype → 06-export/*.html             │
@@ -140,9 +166,16 @@ projects/[name]/01-brief/brief.md
 └─────────────────────────────────────────────────────────┘
                          ↓ (optional)
 ┌─────────────────────────────────────────────────────────┐
-│ Figma Pipeline  (/figma-pipeline)                       │
+│ STAGE 7   Figma Pipeline  (/figma-pipeline)             │
 │ Figma Publisher                                         │
 │ Design System → Key Screens → Code Connect              │
+└─────────────────────────────────────────────────────────┘
+                         ↓ (optional, post-audit)
+┌─────────────────────────────────────────────────────────┐
+│ STAGE 8–9  Design System Pipeline                       │
+│ DS Publisher (/design-system-pipeline)                  │
+│ Extract tokens/components → DS docs → Figma sync        │
+│ Gate 0: library adoption ≥ 80% + /__ds-showcase route   │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -155,8 +188,23 @@ projects/[name]/01-brief/brief.md
 /ux-figma-pipeline [project] [brief]
     → Full pipeline: Research → Prototype → Audit → Export
 
+/ux-figma-pipeline [project] --skip-perplexity
+    → ใช้แค่ NLM (ไม่มี Perplexity API key)
+
+/ux-figma-pipeline [project] --skip-nlm
+    → ใช้แค่ Perplexity (ไม่มี TOR/source doc)
+
 /figma-pipeline [project] [figma-url]
     → Prototype → Figma: Design System + Key Screens + Code Connect
+
+/design-system-pipeline [project] [figma-url]
+    → Stage 8–9: DS docs + token sync (รันหลัง audit ผ่าน)
+
+/design-system-pipeline [project] --pull
+    → Figma → code token sync
+
+/design-system-pipeline [project] --push
+    → code → Figma token sync
 ```
 
 ### Research
@@ -166,6 +214,18 @@ projects/[name]/01-brief/brief.md
 
 /skills:nlm-batch-research [project] [notebook-id]
     → ถามทุกคำถามจาก ai-questions-[name].md อัตโนมัติ
+
+/skills:plx-ask "[question]" [--recency month|year]
+    → ถาม Perplexity 1 ข้อ
+
+/skills:plx-batch-research [project]
+    → ถามทุกคำถามจาก plx-questions-[name].md อัตโนมัติ
+
+/skills:plx-competitive [project] [competitor1] [competitor2] ...
+    → Competitor landscape scan
+
+/skills:plx-regulation [project] [--auto | --topic PDPA]
+    → Compliance / regulation research
 ```
 
 ### Design & Prototype
@@ -205,6 +265,30 @@ projects/[name]/01-brief/brief.md
 
 /skills:figma-flow [project]
     → สร้าง Prototype Flow Guide สำหรับ designer
+```
+
+### Design System (Stage 8–9)
+```
+/skills:ds-extract [project]
+    → Extract tokens + components จาก prototype
+
+/skills:ds-cards [project]
+    → สร้าง Component Cards (Markdown + screenshot)
+
+/skills:ds-overview [project]
+    → สร้าง single-page HTML gallery
+
+/skills:ds-handoff [project]
+    → สร้าง Dev Handoff Package (zip-able)
+
+/skills:ds-push-figma [project] [figma-url]
+    → Push DS section เข้า Figma
+
+/skills:ds-pull-tokens [project]
+    → Pull tokens Figma → code (diff + confirm)
+
+/skills:ds-push-tokens [project]
+    → Push tokens code → Figma (diff + confirm)
 ```
 
 ---

@@ -11,7 +11,8 @@
 |-----------|-----------|------------|
 | Claude Code CLI | รัน pipeline ทั้งหมด | **จำเป็น** |
 | Node.js v20+ | รัน prototype dev server | **จำเป็น** |
-| notebooklm-py | Research automation (NLM) | ถ้าใช้ research stage |
+| notebooklm-py | Internal research automation (NLM) | ถ้าใช้ research stage |
+| Perplexity API key | External research — competitors, regulation | ถ้าใช้ research stage |
 | Figma account | Push design ขึ้น Figma | ถ้าใช้ figma-pipeline |
 | Figma MCP | เชื่อม Claude → Figma | ถ้าใช้ figma-pipeline |
 | Google account | สำหรับ NotebookLM | ถ้าใช้ research stage |
@@ -92,14 +93,60 @@ scripts/nlm.sh login
 
 ---
 
-## STEP 5 — ตั้งค่า Figma MCP (ถ้าใช้ Figma pipeline)
+## STEP 5 — ตั้งค่า Perplexity API (ถ้าใช้ External Research)
 
-### 5A: สร้าง Figma API Token
+Perplexity ใช้สำหรับ external research (competitors, regulation, web trends) ใน Stage 2B
+
+### 5A: สร้าง API Key
+1. ไปที่ [perplexity.ai/account/api/keys](https://www.perplexity.ai/account/api/keys)
+2. Add credit ขั้นต่ำ $5 และผูกบัตร
+3. สร้าง API Key → Copy
+
+### 5B: ตั้ง Environment Variable
+```bash
+# เพิ่มใน ~/.zshrc หรือ ~/.zprofile
+export PERPLEXITY_API_KEY="pplx-..."
+
+# reload shell
+source ~/.zshrc
+```
+
+ตรวจสอบ:
+```bash
+echo $PERPLEXITY_API_KEY
+```
+
+### 5C: เพิ่ม MCP ใน Claude Code settings
+
+แก้ไข `.claude/settings.local.json` เพิ่ม section นี้:
+```json
+{
+  "mcpServers": {
+    "perplexity": {
+      "command": "npx",
+      "args": ["-y", "@chatmcp/server-perplexity-ask"],
+      "env": {
+        "PERPLEXITY_API_KEY": "pplx-..."
+      }
+    }
+  }
+}
+```
+
+> ราคาประมาณ: batch research 1 ครั้ง ≈ $0.30–0.80 | ครบ pipeline 1 project ≈ $3–5
+
+**Fallback ถ้าไม่มี API key:** ใช้ `--skip-perplexity` flag ใน pipeline หรือรัน plx-* skills ด้วย Perplexity web UI แทน
+
+---
+
+## STEP 6 — ตั้งค่า Figma MCP (ถ้าใช้ Figma pipeline)
+
+### 6A: สร้าง Figma API Token
 1. เปิด Figma → Account Settings → Security
 2. สร้าง Personal Access Token
 3. Copy token ไว้
 
-### 5B: เพิ่ม MCP ใน Claude Code settings
+### 6B: เพิ่ม MCP ใน Claude Code settings
 
 แก้ไข `.claude/settings.local.json` (ถ้าไม่มีให้สร้าง):
 ```json
@@ -118,7 +165,7 @@ scripts/nlm.sh login
 
 > ⚠️ อย่า commit `settings.local.json` — มี token อยู่ (ไฟล์นี้อยู่ใน .gitignore แล้ว)
 
-### 5C: ทดสอบ Figma MCP
+### 6C: ทดสอบ Figma MCP
 เปิด Claude Code แล้วลองพิมพ์:
 ```
 /figma-pipeline --help
@@ -127,7 +174,7 @@ scripts/nlm.sh login
 
 ---
 
-## STEP 6 — เปิด Claude Code ใน Folder
+## STEP 7 — เปิด Claude Code ใน Folder
 
 ```bash
 cd "UX Figma Workflow"
@@ -138,7 +185,7 @@ Claude Code จะอ่าน `CLAUDE.md` และโหลด agents/commands
 
 ---
 
-## STEP 7 — สร้าง Project แรก
+## STEP 8 — สร้าง Project แรก
 
 ```bash
 # สร้าง folder structure จาก template

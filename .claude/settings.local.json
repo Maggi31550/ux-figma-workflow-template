@@ -1,0 +1,47 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(cat:*)",
+      "Bash(open:*)",
+      "Bash(npx:*)",
+      "Bash(/Users/socket9/Desktop/notebooklm-py/.venv/bin/notebooklm:*)",
+      "Bash(/Users/socket9/Desktop/UX Figma Workflow/scripts/nlm.sh:*)",
+      "Bash(python3:*)",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_console_messages",
+      "mcp__perplexity__perplexity_ask",
+      "mcp__perplexity__perplexity_research",
+      "mcp__perplexity__perplexity_reason",
+      "mcp__claude_ai_Figma__use_figma",
+      "mcp__claude_ai_Figma__upload_assets"
+    ],
+    "defaultMode": "bypassPermissions"
+  },
+  "enabledMcpjsonServers": [
+    "playwright",
+    "Figma",
+    "perplexity"
+  ],
+  "mcpServers": {
+    "perplexity": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@chatmcp/server-perplexity-ask"
+      ],
+      "env": {
+        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
+      }
+    }
+  }
+}

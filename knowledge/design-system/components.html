@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design System — Component Library</title>
+<link rel="stylesheet" href="base.css">
+<style>
+/* ── Component base styles ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--color-surface-page); color: var(--color-text-primary); }
+
+/* ── NAV ── */
+.ds-nav {
+  background: var(--nav-bg);
+  color: var(--nav-text);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--sp-4) var(--sp-4);
+  min-height: var(--touch-min);
+  position: sticky; top: 0; z-index: 100;
+}
+.ds-nav__logo { font-size: 18px; font-weight: 700; }
+.ds-nav__tabs { display: flex; gap: var(--sp-1); }
+.ds-nav__tab {
+  background: transparent; border: none; color: rgba(255,255,255,0.7);
+  padding: var(--sp-2) var(--sp-3); border-radius: var(--r-md);
+  font-family: var(--font-body); font-size: 14px; cursor: pointer;
+  min-height: var(--touch-min); min-width: var(--touch-min);
+}
+.ds-nav__tab[aria-selected="true"] {
+  color: var(--nav-tab-active); font-weight: 600;
+  border-bottom: 2px solid var(--nav-tab-active);
+}
+.ds-nav__tab:hover { background: rgba(255,255,255,0.1); }
+
+/* ── BOTTOM BAR ── */
+.ds-bottom-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--color-surface-card);
+  border-top: 1px solid var(--color-border-default);
+  display: flex; gap: var(--sp-3); padding: var(--sp-4);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── STEPPER ── */
+.ds-stepper { display: flex; align-items: center; padding: var(--sp-4) 0; gap: 0; }
+.ds-stepper__item { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
+.ds-stepper__item:not(:last-child)::after {
+  content: ''; position: absolute; top: 16px; left: 50%; width: 100%;
+  height: 2px; background: var(--stepper-inactive); z-index: 0;
+}
+.ds-stepper__item--done:not(:last-child)::after { background: var(--stepper-done); }
+.ds-stepper__item--active:not(:last-child)::after { background: var(--stepper-inactive); }
+.ds-stepper__circle {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; z-index: 1; position: relative;
+  background: var(--stepper-inactive); color: var(--color-text-inverse);
+}
+.ds-stepper__item--active .ds-stepper__circle { background: var(--stepper-active); }
+.ds-stepper__item--done .ds-stepper__circle { background: var(--stepper-done); }
+.ds-stepper__label { font-size: 11px; color: var(--color-text-muted); margin-top: var(--sp-1); text-align: center; }
+.ds-stepper__item--active .ds-stepper__label { color: var(--stepper-active); font-weight: 600; }
+
+/* ── PROGRESS BAR ── */
+.ds-progress { height: 4px; background: var(--color-border-default); border-radius: var(--r-full); overflow: hidden; }
+.ds-progress__fill { height: 100%; background: var(--progress-bar); border-radius: var(--r-full); transition: width 0.3s ease; }
+
+/* ── BUTTONS ── */
+.ds-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
+  padding: 0 var(--sp-5); min-height: var(--touch-min);
+  border-radius: var(--r-md); font-family: var(--font-body);
+  font-size: 15px; font-weight: 600; cursor: pointer; border: none;
+  text-decoration: none; transition: background 0.15s, opacity 0.15s;
+}
+.ds-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.ds-btn--primary { background: var(--btn-primary-bg); color: var(--btn-primary-text); }
+.ds-btn--primary:hover:not(:disabled) { background: var(--btn-primary-hover); }
+.ds-btn--secondary {
+  background: var(--btn-secondary-bg); color: var(--btn-secondary-text);
+  border: 1.5px solid var(--btn-secondary-border);
+}
+.ds-btn--secondary:hover:not(:disabled) { background: var(--btn-secondary-hover); }
+.ds-btn--danger { background: var(--btn-danger-bg); color: var(--btn-danger-text); }
+.ds-btn--danger:hover:not(:disabled) { background: var(--ds-red-800); }
+.ds-btn--ghost { background: transparent; color: var(--color-brand-primary); padding: 0 var(--sp-3); }
+.ds-btn--ghost:hover:not(:disabled) { background: var(--color-brand-primary-tint); }
+.ds-btn--full { width: 100%; }
+.ds-btn--sm { min-height: 36px; font-size: 13px; padding: 0 var(--sp-4); }
+
+/* ── CARD ── */
+.ds-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--card-radius); box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+.ds-card__header {
+  padding: var(--sp-4); border-bottom: 1px solid var(--color-border-default);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ds-card__title { font-size: 16px; font-weight: 700; }
+.ds-card__body { padding: var(--sp-4); }
+.ds-card__footer {
+  padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--color-border-default);
+  background: var(--color-surface-page);
+}
+
+/* ── BADGES ── */
+.ds-badge {
+  display: inline-flex; align-items: center; gap: var(--sp-1);
+  padding: 3px var(--sp-2); border-radius: var(--badge-radius);
+  font-size: 12px; font-weight: 600; white-space: nowrap;
+}
+.ds-badge--active    { background: var(--color-status-active-bg);    color: var(--color-status-active-fg); }
+.ds-badge--pending   { background: var(--color-status-pending-bg);   color: var(--color-status-pending-fg); }
+.ds-badge--revoked   { background: var(--color-status-revoked-bg);   color: var(--color-status-revoked-fg); }
+.ds-badge--suspended { background: var(--color-status-suspended-bg); color: var(--color-status-suspended-fg); }
+.ds-badge--expired   { background: var(--color-status-expired-bg);   color: var(--color-status-expired-fg); }
+.ds-badge--notfound  { background: var(--color-status-notfound-bg);  color: var(--color-status-notfound-fg); }
+.ds-badge__dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* ── ALERTS ── */
+.ds-alert {
+  display: flex; align-items: flex-start; gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4); border-radius: var(--r-md);
+  border-left: 3px solid transparent; font-size: 14px;
+}
+.ds-alert--error   { background: var(--color-feedback-error-bg);   color: var(--color-feedback-error-fg);   border-color: var(--color-feedback-error-border); }
+.ds-alert--success { background: var(--color-feedback-success-bg); color: var(--color-feedback-success-fg); border-color: var(--color-status-active-icon); }
+.ds-alert--info    { background: var(--color-feedback-info-bg);    color: var(--color-feedback-info-fg);    border-color: var(--color-brand-primary-light); }
+.ds-alert--warning { background: var(--color-status-pending-bg);   color: var(--color-status-pending-fg);   border-color: var(--ds-amber-800); }
+
+/* ── FORM GROUP ── */
+.ds-form-group { display: flex; flex-direction: column; gap: var(--sp-1); }
+.ds-label { font-size: 14px; font-weight: 600; color: var(--color-text-secondary); }
+.ds-label--required::after { content: ' *'; color: var(--color-feedback-error-fg); }
+.ds-input {
+  height: var(--touch-min); padding: 0 var(--sp-4);
+  border: 1.5px solid var(--input-border); border-radius: var(--input-radius);
+  font-family: var(--font-body); font-size: 15px; background: var(--input-bg);
+  color: var(--color-text-primary); width: 100%;
+  transition: border-color 0.15s;
+}
+.ds-input:focus { outline: none; border-color: var(--input-border-focus); box-shadow: 0 0 0 3px rgba(37,99,212,0.15); }
+.ds-input--error { border-color: var(--input-border-error); }
+.ds-input--error:focus { box-shadow: 0 0 0 3px rgba(239,68,68,0.15); }
+textarea.ds-input { height: auto; padding: var(--sp-3) var(--sp-4); resize: vertical; min-height: 88px; }
+.ds-helper { font-size: 13px; color: var(--color-text-muted); }
+.ds-error-msg { font-size: 13px; color: var(--color-feedback-error-fg); }
+
+/* ── TABLE ── */
+.ds-table-wrap { overflow-x: auto; border-radius: var(--r-lg); border: 1px solid var(--color-border-default); }
+.ds-table { width: 100%; border-collapse: collapse; background: var(--color-surface-card); font-size: 14px; }
+.ds-table th {
+  background: var(--color-surface-page); text-align: left;
+  padding: var(--sp-3) var(--sp-4); font-weight: 600;
+  border-bottom: 1px solid var(--color-border-default);
+  color: var(--color-text-secondary); white-space: nowrap;
+}
+.ds-table td { padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-border-default); }
+.ds-table tr:last-child td { border-bottom: none; }
+.ds-table tr:hover td { background: var(--color-surface-page); }
+
+/* ── MODAL ── */
+.ds-modal-overlay {
+  position: fixed; inset: 0; background: var(--modal-overlay);
+  display: flex; align-items: flex-end; justify-content: center;
+  z-index: 200; padding: 0;
+}
+.ds-modal {
+  background: var(--modal-bg); border-radius: var(--modal-radius) var(--modal-radius) 0 0;
+  box-shadow: var(--modal-shadow); width: 100%; max-height: 90vh;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.ds-modal__handle { width: 36px; height: 4px; background: var(--color-border-strong); border-radius: var(--r-full); margin: var(--sp-3) auto; }
+.ds-modal__header {
+  padding: 0 var(--sp-4) var(--sp-4);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ds-modal__title { font-size: 18px; font-weight: 700; }
+.ds-modal__close { background: none; border: none; font-size: 22px; cursor: pointer; padding: var(--sp-2); min-width: var(--touch-min); min-height: var(--touch-min); }
+.ds-modal__body { padding: 0 var(--sp-4); overflow-y: auto; flex: 1; }
+.ds-modal__footer { padding: var(--sp-4); display: flex; gap: var(--sp-3); }
+
+/* ── EMPTY STATE ── */
+.ds-empty {
+  display: flex; flex-direction: column; align-items: center;
+  gap: var(--sp-3); padding: var(--sp-16) var(--sp-6); text-align: center;
+}
+.ds-empty__icon { font-size: 48px; opacity: 0.35; }
+.ds-empty__title { font-size: 18px; font-weight: 700; color: var(--color-text-secondary); }
+.ds-empty__desc { font-size: 14px; color: var(--color-text-muted); max-width: 260px; }
+
+/* ── SKELETON ── */
+.ds-skeleton {
+  background: linear-gradient(90deg, var(--ds-gray-100) 25%, var(--ds-gray-200) 50%, var(--ds-gray-100) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+  border-radius: var(--r-md);
+}
+@keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.ds-skeleton--text  { height: 16px; width: 70%; }
+.ds-skeleton--title { height: 24px; width: 50%; }
+.ds-skeleton--card  { height: 80px; width: 100%; }
+
+/* ── TOAST ── */
+.ds-toast {
+  position: fixed; bottom: var(--sp-16); left: 50%; transform: translateX(-50%);
+  background: var(--ds-gray-900); color: var(--ds-white);
+  padding: var(--sp-3) var(--sp-5); border-radius: var(--r-lg);
+  font-size: 14px; font-weight: 500; box-shadow: var(--shadow-lg);
+  display: flex; align-items: center; gap: var(--sp-2);
+  white-space: nowrap; z-index: 300;
+  animation: toast-in 0.2s ease;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateX(-50%) translateY(8px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+/* ── UPLOAD ZONE ── */
+.ds-upload {
+  border: 2px dashed var(--color-border-strong); border-radius: var(--r-lg);
+  padding: var(--sp-8) var(--sp-6); text-align: center;
+  cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.ds-upload:hover, .ds-upload--active { border-color: var(--color-brand-primary-light); background: var(--color-brand-primary-tint); }
+.ds-upload__icon { font-size: 32px; margin-bottom: var(--sp-2); }
+.ds-upload__label { font-size: 15px; font-weight: 600; color: var(--color-brand-primary); }
+.ds-upload__hint  { font-size: 13px; color: var(--color-text-muted); }
+
+/* ── CHECKLIST ── */
+.ds-checklist { list-style: none; display: flex; flex-direction: column; gap: var(--sp-2); }
+.ds-checklist__item {
+  display: flex; align-items: flex-start; gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4); background: var(--color-surface-card);
+  border-radius: var(--r-md); border: 1px solid var(--color-border-default);
+}
+.ds-checklist__check {
+  width: 20px; height: 20px; border-radius: var(--r-sm);
+  border: 2px solid var(--color-border-strong); flex-shrink: 0; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.15s;
+}
+.ds-checklist__check--done { background: var(--stepper-done); border-color: var(--stepper-done); color: white; }
+.ds-checklist__text { font-size: 14px; flex: 1; }
+.ds-checklist__text--done { text-decoration: line-through; color: var(--color-text-muted); }
+
+/* ── DETAIL ROW ── */
+.ds-detail-row { display: flex; gap: var(--sp-4); padding: var(--sp-3) 0; border-bottom: 1px solid var(--color-border-default); }
+.ds-detail-row:last-child { border-bottom: none; }
+.ds-detail-row__label { font-size: 13px; color: var(--color-text-muted); min-width: 100px; flex-shrink: 0; padding-top: 2px; }
+.ds-detail-row__value { font-size: 15px; font-weight: 500; flex: 1; }
+
+/* ── FILTER TABS ── */
+.ds-filter-tabs { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.ds-filter-tab {
+  padding: var(--sp-2) var(--sp-4); border-radius: var(--r-full);
+  border: 1.5px solid var(--color-border-strong);
+  background: transparent; font-family: var(--font-body); font-size: 14px;
+  cursor: pointer; transition: all 0.15s; min-height: var(--touch-min);
+  display: flex; align-items: center;
+}
+.ds-filter-tab[aria-selected="true"] {
+  background: var(--color-brand-primary); color: var(--color-text-inverse);
+  border-color: var(--color-brand-primary);
+}
+.ds-filter-tab:hover:not([aria-selected="true"]) { border-color: var(--color-brand-primary); color: var(--color-brand-primary); }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     COMPONENT PREVIEW PAGE
+     เปิดไฟล์นี้ใน browser เพื่อดู all components พร้อมกัน
+     Link ใน prototype: <link rel="stylesheet" href="../../../knowledge/design-system/base.css">
+════════════════════════════════════════════════════ -->
+
+<div style="padding: var(--sp-4); max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--sp-6);">
+
+  <!-- NAV -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">NAV</p>
+    <nav class="ds-nav" role="navigation" aria-label="Main navigation">
+      <span class="ds-nav__logo">Logo</span>
+      <div class="ds-nav__tabs" role="tablist">
+        <button class="ds-nav__tab" role="tab" aria-selected="true">หน้าหลัก</button>
+        <button class="ds-nav__tab" role="tab" aria-selected="false">สถานะ</button>
+        <button class="ds-nav__tab" role="tab" aria-selected="false">โปรไฟล์</button>
+      </div>
+    </nav>
+  </section>
+
+  <!-- STEPPER -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">STEPPER</p>
+    <nav class="ds-stepper" aria-label="Step progress">
+      <div class="ds-stepper__item ds-stepper__item--done">
+        <div class="ds-stepper__circle" aria-label="Step 1 complete">✓</div>
+        <span class="ds-stepper__label">ข้อมูล</span>
+      </div>
+      <div class="ds-stepper__item ds-stepper__item--active">
+        <div class="ds-stepper__circle" aria-current="step">2</div>
+        <span class="ds-stepper__label">เอกสาร</span>
+      </div>
+      <div class="ds-stepper__item">
+        <div class="ds-stepper__circle" aria-label="Step 3">3</div>
+        <span class="ds-stepper__label">ตรวจสอบ</span>
+      </div>
+      <div class="ds-stepper__item">
+        <div class="ds-stepper__circle" aria-label="Step 4">4</div>
+        <span class="ds-stepper__label">ยืนยัน</span>
+      </div>
+    </nav>
+    <div class="ds-progress" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Progress 40%">
+      <div class="ds-progress__fill" style="width:40%"></div>
+    </div>
+  </section>
+
+  <!-- BUTTONS -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">BUTTONS</p>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--sp-2)">
+      <button class="ds-btn ds-btn--primary">ถัดไป</button>
+      <button class="ds-btn ds-btn--secondary">ย้อนกลับ</button>
+      <button class="ds-btn ds-btn--danger">ลบ</button>
+      <button class="ds-btn ds-btn--ghost">ยกเลิก</button>
+      <button class="ds-btn ds-btn--primary ds-btn--sm">บันทึก</button>
+      <button class="ds-btn ds-btn--primary" disabled>กำลังส่ง...</button>
+    </div>
+    <button class="ds-btn ds-btn--primary ds-btn--full" style="margin-top:var(--sp-2)">ดำเนินการต่อ</button>
+  </section>
+
+  <!-- BADGES -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">BADGES — STATUS</p>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--sp-2)">
+      <span class="ds-badge ds-badge--active"><span class="ds-badge__dot" aria-hidden="true"></span>ใช้งาน</span>
+      <span class="ds-badge ds-badge--pending">รออนุมัติ</span>
+      <span class="ds-badge ds-badge--revoked">ถูกเพิกถอน</span>
+      <span class="ds-badge ds-badge--suspended">ระงับชั่วคราว</span>
+      <span class="ds-badge ds-badge--expired">หมดอายุ</span>
+      <span class="ds-badge ds-badge--notfound">ไม่พบ</span>
+    </div>
+  </section>
+
+  <!-- ALERTS -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">ALERTS</p>
+    <div style="display:flex;flex-direction:column;gap:var(--sp-2)">
+      <div class="ds-alert ds-alert--error" role="alert">❌ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง</div>
+      <div class="ds-alert ds-alert--success" role="status">✅ ส่งข้อมูลเรียบร้อยแล้ว</div>
+      <div class="ds-alert ds-alert--info" role="note">ℹ️ กรุณาเตรียมเอกสารให้ครบ</div>
+      <div class="ds-alert ds-alert--warning" role="note">⚠️ ใบรับรองจะหมดอายุใน 30 วัน</div>
+    </div>
+  </section>
+
+  <!-- CARD -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">CARD</p>
+    <div class="ds-card">
+      <div class="ds-card__header">
+        <span class="ds-card__title">ผลิตภัณฑ์ A</span>
+        <span class="ds-badge ds-badge--active">ใช้งาน</span>
+      </div>
+      <div class="ds-card__body">
+        <div class="ds-detail-row">
+          <span class="ds-detail-row__label">รหัส</span>
+          <span class="ds-detail-row__value">OCPB-2026-00123</span>
+        </div>
+        <div class="ds-detail-row">
+          <span class="ds-detail-row__label">วันหมดอายุ</span>
+          <span class="ds-detail-row__value">31 ธ.ค. 2569</span>
+        </div>
+      </div>
+      <div class="ds-card__footer">
+        <button class="ds-btn ds-btn--ghost ds-btn--sm">ดูรายละเอียด</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">FORM</p>
+    <div style="display:flex;flex-direction:column;gap:var(--sp-4)">
+      <div class="ds-form-group">
+        <label class="ds-label ds-label--required" for="ex-name">ชื่อผลิตภัณฑ์</label>
+        <input class="ds-input" id="ex-name" type="text" placeholder="ระบุชื่อผลิตภัณฑ์">
+      </div>
+      <div class="ds-form-group">
+        <label class="ds-label" for="ex-error">รหัสผ่าน</label>
+        <input class="ds-input ds-input--error" id="ex-error" type="password" value="abc" aria-describedby="ex-error-msg" aria-invalid="true">
+        <span class="ds-error-msg" id="ex-error-msg" role="alert">รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABLE -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">TABLE</p>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th scope="col">ผลิตภัณฑ์</th>
+            <th scope="col">วันที่</th>
+            <th scope="col">สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>สบู่ก้อน A</td>
+            <td>12 พ.ค. 2569</td>
+            <td><span class="ds-badge ds-badge--active">ใช้งาน</span></td>
+          </tr>
+          <tr>
+            <td>ครีมกันแดด B</td>
+            <td>10 พ.ค. 2569</td>
+            <td><span class="ds-badge ds-badge--pending">รออนุมัติ</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- UPLOAD ZONE -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">UPLOAD ZONE</p>
+    <div class="ds-upload" role="button" tabindex="0" aria-label="อัพโหลดไฟล์">
+      <div class="ds-upload__icon">📎</div>
+      <div class="ds-upload__label">แตะเพื่อเลือกไฟล์</div>
+      <div class="ds-upload__hint">PDF, JPG, PNG ขนาดไม่เกิน 5MB</div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">CHECKLIST</p>
+    <ul class="ds-checklist">
+      <li class="ds-checklist__item">
+        <div class="ds-checklist__check ds-checklist__check--done" aria-label="เสร็จสิ้น">✓</div>
+        <span class="ds-checklist__text ds-checklist__text--done">สำเนาใบจดทะเบียนพาณิชย์</span>
+      </li>
+      <li class="ds-checklist__item">
+        <div class="ds-checklist__check" aria-label="ยังไม่เสร็จ"></div>
+        <span class="ds-checklist__text">ผลการทดสอบห้องปฏิบัติการ</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- EMPTY STATE -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">EMPTY STATE</p>
+    <div class="ds-card">
+      <div class="ds-empty" role="status" aria-label="ไม่มีข้อมูล">
+        <div class="ds-empty__icon" aria-hidden="true">📭</div>
+        <div class="ds-empty__title">ยังไม่มีรายการ</div>
+        <div class="ds-empty__desc">เริ่มต้นยื่นคำขอรับรองผลิตภัณฑ์แรกของคุณ</div>
+        <button class="ds-btn ds-btn--primary">เริ่มยื่นคำขอ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKELETON -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">SKELETON (Loading)</p>
+    <div class="ds-card">
+      <div class="ds-card__body" style="display:flex;flex-direction:column;gap:var(--sp-3)">
+        <div class="ds-skeleton ds-skeleton--title" aria-hidden="true"></div>
+        <div class="ds-skeleton ds-skeleton--text" aria-hidden="true"></div>
+        <div class="ds-skeleton ds-skeleton--text" style="width:50%" aria-hidden="true"></div>
+        <div class="ds-skeleton ds-skeleton--card" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTER TABS -->
+  <section>
+    <p style="font-size:11px;color:var(--color-text-muted);margin-bottom:var(--sp-2)">FILTER TABS</p>
+    <div class="ds-filter-tabs" role="group" aria-label="กรองสถานะ">
+      <button class="ds-filter-tab" role="radio" aria-selected="true">ทั้งหมด</button>
+      <button class="ds-filter-tab" role="radio" aria-selected="false">ใช้งาน</button>
+      <button class="ds-filter-tab" role="radio" aria-selected="false">รออนุมัติ</button>
+      <button class="ds-filter-tab" role="radio" aria-selected="false">หมดอายุ</button>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

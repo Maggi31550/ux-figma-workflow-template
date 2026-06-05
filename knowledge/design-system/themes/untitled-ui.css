@@ -1,0 +1,15 @@
+/* ═══════════════════════════════════════════════════════════════
+   UNTITLED UI THEME — DEPRECATED 2026-05-14
+   ─────────────────────────────────────────────────────────────
+   ไฟล์นี้ไม่จำเป็นอีกต่อไป
+
+   base.css ถูก sync กับ Figma แล้ว และใช้ Untitled UI
+   purple theme เป็น default โดยตรง
+
+   การใช้ที่ถูกต้อง (ตั้งแต่ version 2.0):
+     <link rel="stylesheet" href="../../../knowledge/design-system/base.css">
+     ← ไม่ต้อง link ไฟล์นี้อีกต่อไป
+
+   ถ้า project ต้องการ brand สีอื่น → ใช้ projects/_template/theme.css
+   แล้ว override --color-brand-primary และ primitives ที่ต้องการ
+═══════════════════════════════════════════════════════════════ */

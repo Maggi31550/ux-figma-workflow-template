@@ -1,0 +1,76 @@
+/* ═══════════════════════════════════════════════════════════════
+   PROJECT THEME — [PROJECT NAME]
+   Override file สำหรับ UX Workflow Design System
+
+   วิธีใช้:
+   1. Copy ไฟล์นี้ไปที่ projects/[name]/05-prototype/theme.css
+   2. Uncomment และแก้เฉพาะบรรทัดที่ต้องการ
+   3. Link ใน HTML หลัง base.css:
+      <link rel="stylesheet" href="theme.css">
+
+   กฎ:
+   ✅ Override ได้: --color-* (Layer 2 semantic)
+   ✅ เพิ่มได้:    --ds-* primitive ใหม่ที่ยังไม่มีใน DS
+   ⛔ ห้ามแก้:    --btn-*, --nav-*, --card-* (Layer 3 component)
+═══════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ─────────────────────────────────────────────
+     STEP 1: เพิ่ม primitive ใหม่ (ถ้าต้องการสีที่ไม่มีใน DS)
+     ตั้งชื่อตาม pattern: --ds-[color]-[shade]
+  ───────────────────────────────────────────── */
+
+  /* ตัวอย่าง:
+  --ds-purple-900: #3B0764;
+  --ds-purple-800: #4C1D95;
+  --ds-purple-500: #7C3AED;
+  --ds-purple-100: #EDE9FE;
+
+  --ds-teal-800: #134E4A;
+  --ds-teal-600: #0D9488;
+  --ds-teal-100: #CCFBF1;
+  */
+
+
+  /* ─────────────────────────────────────────────
+     STEP 2: Override semantic tokens (Layer 2)
+     แก้ค่าเหล่านี้เพื่อ re-brand ทั้ง project
+  ───────────────────────────────────────────── */
+
+  /* Brand colors
+  --color-brand-primary:       var(--ds-purple-800);
+  --color-brand-primary-mid:   var(--ds-purple-500);
+  --color-brand-primary-light: var(--ds-purple-500);
+  --color-brand-primary-tint:  var(--ds-purple-100);
+  --color-brand-accent:        var(--ds-gold-500);
+  --color-brand-accent-tint:   var(--ds-gold-100);
+  */
+
+  /* Status colors — เปลี่ยนได้ถ้า project ใช้ meaning ต่าง
+  --color-status-active-bg:    var(--ds-teal-100);
+  --color-status-active-fg:    var(--ds-teal-800);
+  --color-status-active-icon:  var(--ds-teal-600);
+  */
+
+  /* Surface colors
+  --color-surface-page:  var(--ds-gray-050);   ← default
+  --color-surface-card:  var(--ds-white);       ← default
+  */
+
+  /* ─────────────────────────────────────────────
+     STEP 3: Typography (ถ้า project ใช้ font อื่น)
+  ───────────────────────────────────────────── */
+
+  /* เพิ่ม @import ใน <head> ก่อน แล้วค่อย override ที่นี่
+  --font-body: 'IBM Plex Sans Thai', 'Sarabun', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  */
+
+}
+
+/* ─────────────────────────────────────────────
+   WCAG CHECK REMINDER
+   หลัง override สี ให้กรอก projects/[name]/wcag-theme-check.md
+   ตรวจเฉพาะ token ที่เปลี่ยน — ไม่ต้อง audit ทั้ง DS
+───────────────────────────────────────────── */

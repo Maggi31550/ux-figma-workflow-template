@@ -1,0 +1,35 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ds-preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "/Users/socket9/Desktop/UX Figma Workflow", "--listen", "8800", "--no-clipboard"],
+      "port": 8800
+    },
+    {
+      "name": "trailbook-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/socket9/Desktop/UX Figma Workflow/projects/trailbook/05-prototype",
+      "port": 5174,
+      "autoPort": true
+    },
+    {
+      "name": "bullvpn-v2",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "5176"],
+      "cwd": "/Users/socket9/Desktop/UX Figma Workflow/projects/bullvpn-redesign/05-prototype",
+      "port": 5176,
+      "autoPort": true
+    },
+    {
+      "name": "bullvpn-v2-lp",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "5200"],
+      "cwd": "/Users/socket9/Desktop/UX Figma Workflow/projects/bullvpn-redesign/05-prototype-v2",
+      "port": 5200,
+      "autoPort": true
+    }
+  ]
+}

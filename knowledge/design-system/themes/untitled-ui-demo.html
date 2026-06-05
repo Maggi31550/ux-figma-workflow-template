@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataSure Portal — Untitled UI Style</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Untitled UI Tokens ── */
+:root {
+  --brand-25:  #FCFAFF; --brand-50:  #F9F5FF; --brand-100: #F4EBFF;
+  --brand-200: #E9D7FE; --brand-300: #D6BBFB; --brand-400: #B692F6;
+  --brand-500: #9061F9; --brand-600: #7C3AED; --brand-700: #6927DA;
+  --brand-800: #5521B5; --brand-900: #44179A;
+
+  --success-50:  #ECFDF3; --success-500: #12B76A; --success-700: #027A48;
+  --warning-50:  #FFFAEB; --warning-500: #F79009; --warning-700: #B54708;
+  --error-50:    #FEF3F2; --error-500:   #F04438; --error-700:   #B42318;
+  --blue-50:     #EFF8FF; --blue-500:    #2E90FA; --blue-700:    #175CD3;
+
+  --gray-25:  #FCFCFD; --gray-50:  #F9FAFB; --gray-100: #F2F4F7;
+  --gray-200: #EAECF0; --gray-300: #D0D5DD; --gray-400: #98A2B3;
+  --gray-500: #667085; --gray-600: #475467; --gray-700: #344054;
+  --gray-800: #1D2939; --gray-900: #101828;
+
+  --shadow-xs: 0px 1px 2px rgba(16,24,40,0.05);
+  --shadow-sm: 0px 1px 3px rgba(16,24,40,0.10), 0px 1px 2px rgba(16,24,40,0.06);
+  --shadow-md: 0px 4px 8px -2px rgba(16,24,40,0.10), 0px 2px 4px -2px rgba(16,24,40,0.06);
+  --shadow-lg: 0px 12px 16px -4px rgba(16,24,40,0.08), 0px 4px 6px -2px rgba(16,24,40,0.03);
+  --shadow-xl: 0px 20px 24px -4px rgba(16,24,40,0.08), 0px 8px 8px -4px rgba(16,24,40,0.03);
+
+  --r-sm: 6px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-2xl: 20px; --r-full: 9999px;
+  --font: 'Inter', system-ui, sans-serif;
+}
+
+/* ── Base ── */
+body {
+  font-family: var(--font);
+  background: var(--gray-50);
+  color: var(--gray-900);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════
+   TOP NAV
+═══════════════════════════════ */
+.nav {
+  background: #fff;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  height: 64px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: var(--shadow-xs);
+}
+.nav-left { display: flex; align-items: center; gap: 32px; }
+.nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; color: var(--gray-900); }
+.nav-logo-dot {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-400));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.nav-tabs { display: flex; gap: 4px; }
+.nav-tab {
+  padding: 8px 12px; border-radius: var(--r-sm);
+  font-size: 14px; font-weight: 500; color: var(--gray-600);
+  cursor: pointer; border: none; background: transparent;
+  font-family: var(--font);
+  transition: background 0.15s, color 0.15s;
+}
+.nav-tab:hover { background: var(--gray-100); color: var(--gray-900); }
+.nav-tab.active { background: var(--brand-50); color: var(--brand-700); font-weight: 600; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-400), var(--brand-700));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; border-radius: var(--r-md);
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  cursor: pointer; border: none; transition: all 0.15s; text-decoration: none;
+}
+.btn-primary { background: var(--brand-600); color: #fff; box-shadow: var(--shadow-xs); }
+.btn-primary:hover { background: var(--brand-700); }
+.btn-secondary {
+  background: #fff; color: var(--gray-700);
+  border: 1px solid var(--gray-300); box-shadow: var(--shadow-xs);
+}
+.btn-secondary:hover { background: var(--gray-50); }
+.btn-sm { padding: 7px 12px; font-size: 13px; }
+.btn-ghost { background: transparent; color: var(--brand-700); padding: 9px 12px; }
+.btn-ghost:hover { background: var(--brand-50); }
+
+/* ═══════════════════════════════
+   PAGE LAYOUT
+═══════════════════════════════ */
+.page { max-width: 1024px; margin: 0 auto; padding: 32px 24px 80px; }
+
+/* ═══════════════════════════════
+   PAGE HEADER
+═══════════════════════════════ */
+.page-header { margin-bottom: 32px; }
+.page-header-top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.page-header-eyebrow {
+  font-size: 12px; font-weight: 600; color: var(--brand-700);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.page-header h1 { font-size: 28px; font-weight: 700; color: var(--gray-900); line-height: 1.3; }
+.page-header-sub { font-size: 15px; color: var(--gray-500); margin-top: 6px; }
+.page-header-actions { display: flex; gap: 10px; flex-shrink: 0; }
+
+/* ═══════════════════════════════
+   STATS ROW
+═══════════════════════════════ */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+.stat-card {
+  background: #fff; border: 1px solid var(--gray-200);
+  border-radius: var(--r-xl); padding: 20px 20px 18px;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.15s;
+}
+.stat-card:hover { box-shadow: var(--shadow-sm); }
+.stat-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.stat-label { font-size: 13px; font-weight: 500; color: var(--gray-500); }
+.stat-icon {
+  width: 32px; height: 32px; border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+}
+.stat-icon-purple { background: var(--brand-50); }
+.stat-icon-green  { background: var(--success-50); }
+.stat-icon-amber  { background: var(--warning-50); }
+.stat-icon-blue   { background: var(--blue-50); }
+.stat-value { font-size: 28px; font-weight: 700; color: var(--gray-900); line-height: 1; }
+.stat-trend { margin-top: 6px; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+.stat-trend-up   { color: var(--success-700); }
+.stat-trend-down { color: var(--error-700); }
+
+/* ═══════════════════════════════
+   SECTION HEADING
+═══════════════════════════════ */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title { font-size: 16px; font-weight: 600; color: var(--gray-900); }
+.section-sub   { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+
+/* ═══════════════════════════════
+   BADGE
+═══════════════════════════════ */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 8px; border-radius: var(--r-full);
+  font-size: 12px; font-weight: 500; white-space: nowrap;
+}
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.badge-active   { background: var(--success-50); color: var(--success-700); }
+.badge-pending  { background: var(--warning-50); color: var(--warning-700); }
+.badge-revoked  { background: var(--error-50);   color: var(--error-700); }
+.badge-expired  { background: var(--gray-100);   color: var(--gray-600); }
+.badge-purple   { background: var(--brand-50);   color: var(--brand-700); }
+
+/* ═══════════════════════════════
+   FILTER TABS
+═══════════════════════════════ */
+.filter-tabs { display: flex; gap: 2px; background: var(--gray-100); padding: 4px; border-radius: var(--r-lg); width: fit-content; }
+.filter-tab {
+  padding: 6px 14px; border-radius: var(--r-md);
+  font-family: var(--font); font-size: 13px; font-weight: 500;
+  color: var(--gray-600); cursor: pointer; border: none; background: transparent;
+  transition: all 0.15s;
+}
+.filter-tab.active {
+  background: #fff; color: var(--gray-900); font-weight: 600;
+  box-shadow: var(--shadow-xs);
+}
+
+/* ═══════════════════════════════
+   TABLE CARD
+═══════════════════════════════ */
+.table-card {
+  background: #fff; border: 1px solid var(--gray-200);
+  border-radius: var(--r-xl); box-shadow: var(--shadow-xs);
+  overflow: hidden; margin-bottom: 24px;
+}
+.table-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+table { width: 100%; border-collapse: collapse; }
+th {
+  padding: 11px 20px; text-align: left;
+  font-size: 11px; font-weight: 600; color: var(--gray-500);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  background: var(--gray-50); border-bottom: 1px solid var(--gray-200);
+}
+td { padding: 14px 20px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--gray-25); }
+.td-main { font-size: 14px; font-weight: 500; color: var(--gray-900); }
+.td-sub  { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+.td-meta { font-size: 13px; color: var(--gray-600); }
+.td-actions { display: flex; gap: 8px; }
+
+/* ═══════════════════════════════
+   CARD GRID (Featured)
+═══════════════════════════════ */
+.card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 28px; }
+.product-card {
+  background: #fff; border: 1px solid var(--gray-200);
+  border-radius: var(--r-xl); padding: 20px;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+.product-card:hover { box-shadow: var(--shadow-md); border-color: var(--gray-300); }
+.product-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+.product-icon {
+  width: 44px; height: 44px; border-radius: var(--r-lg);
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+  background: var(--brand-50); flex-shrink: 0;
+}
+.product-name { font-size: 15px; font-weight: 600; color: var(--gray-900); margin-bottom: 2px; }
+.product-id   { font-size: 12px; color: var(--gray-400); font-family: 'SF Mono', monospace; }
+.product-divider { height: 1px; background: var(--gray-100); margin: 14px 0; }
+.product-meta-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.product-meta-label { font-size: 12px; color: var(--gray-500); }
+.product-meta-value { font-size: 12px; font-weight: 500; color: var(--gray-700); }
+.product-footer { margin-top: 14px; display: flex; gap: 8px; }
+
+/* ═══════════════════════════════
+   FORM MODAL (Sheet style)
+═══════════════════════════════ */
+.modal-sheet {
+  background: #fff; border: 1px solid var(--gray-200);
+  border-radius: var(--r-2xl); box-shadow: var(--shadow-xl);
+  overflow: hidden; margin-bottom: 24px;
+}
+.modal-header {
+  padding: 20px 24px 0; display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+.modal-sub   { font-size: 14px; color: var(--gray-500); margin-top: 4px; }
+.modal-close {
+  width: 36px; height: 36px; border-radius: var(--r-md); border: 1px solid var(--gray-200);
+  background: #fff; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; color: var(--gray-400);
+  box-shadow: var(--shadow-xs);
+}
+.modal-body   { padding: 20px 24px; }
+.modal-footer {
+  padding: 14px 24px; border-top: 1px solid var(--gray-100);
+  display: flex; justify-content: flex-end; gap: 10px;
+  background: var(--gray-25);
+}
+
+/* ── Form ── */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 14px; font-weight: 500; color: var(--gray-700); }
+.form-label span { color: var(--error-500); }
+.input {
+  height: 44px; padding: 0 14px;
+  border: 1px solid var(--gray-300); border-radius: var(--r-md);
+  font-family: var(--font); font-size: 14px; color: var(--gray-900);
+  background: #fff; width: 100%;
+  box-shadow: var(--shadow-xs);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input::placeholder { color: var(--gray-400); }
+.input:focus {
+  outline: none;
+  border-color: var(--brand-300);
+  box-shadow: 0 0 0 4px var(--brand-100), var(--shadow-xs);
+}
+.input-hint { font-size: 12px; color: var(--gray-500); }
+.input-error-msg { font-size: 12px; color: var(--error-600); }
+.input.error { border-color: #FDA29B; }
+.input.error:focus { box-shadow: 0 0 0 4px #FEE4E2, var(--shadow-xs); }
+
+/* ── Stepper ── */
+.stepper { display: flex; align-items: center; margin-bottom: 24px; }
+.step { display: flex; align-items: center; flex: 1; }
+.step:last-child { flex: 0; }
+.step-circle {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+  border: 2px solid var(--gray-200); color: var(--gray-400); background: #fff;
+  transition: all 0.15s;
+}
+.step.done .step-circle { background: var(--success-500); border-color: var(--success-500); color: #fff; }
+.step.active .step-circle {
+  background: var(--brand-600); border-color: var(--brand-600); color: #fff;
+  box-shadow: 0 0 0 4px var(--brand-100);
+}
+.step-line { flex: 1; height: 2px; background: var(--gray-200); margin: 0 8px; }
+.step.done + .step .step-line, .step.done .step-line { background: var(--success-500); }
+.step-info { margin-left: 10px; }
+.step-label { font-size: 13px; font-weight: 600; color: var(--gray-400); }
+.step.active .step-label { color: var(--brand-700); }
+.step.done .step-label  { color: var(--success-700); }
+.step-sub { font-size: 11px; color: var(--gray-400); }
+
+/* ── Progress bar ── */
+.progress-wrap { margin-bottom: 20px; }
+.progress-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.progress-title { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+.progress-pct   { font-size: 13px; font-weight: 600; color: var(--brand-700); }
+.progress-bar   { height: 8px; background: var(--gray-100); border-radius: var(--r-full); overflow: hidden; }
+.progress-fill  { height: 100%; border-radius: var(--r-full); background: var(--brand-600); transition: width 0.4s ease; }
+
+/* ── Alert ── */
+.alert {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px; border-radius: var(--r-lg);
+  border: 1px solid transparent; font-size: 14px; line-height: 1.5;
+  margin-bottom: 16px;
+}
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert-text-title { font-weight: 600; margin-bottom: 2px; }
+.alert-success { background: #ECFDF3; color: #027A48; border-color: #A6F4C5; }
+.alert-error   { background: #FEF3F2; color: #B42318; border-color: #FECDCA; }
+.alert-warning { background: #FFFAEB; color: #B54708; border-color: #FEDF89; }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center; padding: 48px 32px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.empty-icon-wrap {
+  width: 56px; height: 56px; border-radius: var(--r-xl);
+  background: var(--brand-50); border: 1px solid var(--brand-200);
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
+  margin-bottom: 4px;
+}
+.empty-title { font-size: 16px; font-weight: 600; color: var(--gray-900); }
+.empty-desc  { font-size: 14px; color: var(--gray-500); max-width: 260px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-logo">
+      <div class="nav-logo-dot">🛡️</div>
+      DataSure
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active">Dashboard</button>
+      <button class="nav-tab">Products</button>
+      <button class="nav-tab">Reports</button>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-secondary btn-sm">Help</button>
+    <div class="avatar">ส</div>
+  </div>
+</nav>
+
+<!-- ── PAGE ── -->
+<div class="page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-top">
+      <div>
+        <div class="page-header-eyebrow">OCPB DataSure</div>
+        <h1>Product Certifications</h1>
+        <div class="page-header-sub">Manage and track your certified products</div>
+      </div>
+      <div class="page-header-actions">
+        <button class="btn btn-secondary">Export</button>
+        <button class="btn btn-primary">+ New application</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <span class="stat-label">Total certified</span>
+          <div class="stat-icon stat-icon-purple">🛡️</div>
+        </div>
+        <div class="stat-value">142</div>
+        <div class="stat-trend stat-trend-up">↑ 12% from last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <span class="stat-label">Active</span>
+          <div class="stat-icon stat-icon-green">✓</div>
+        </div>
+        <div class="stat-value">118</div>
+        <div class="stat-trend stat-trend-up">↑ 8 new this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <span class="stat-label">Pending review</span>
+          <div class="stat-icon stat-icon-amber">⏳</div>
+        </div>
+        <div class="stat-value">14</div>
+        <div class="stat-trend" style="color:var(--gray-500)">Avg. 3 days review</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <span class="stat-label">Expiring soon</span>
+          <div class="stat-icon stat-icon-blue">⚠️</div>
+        </div>
+        <div class="stat-value">6</div>
+        <div class="stat-trend stat-trend-down">↓ Within 30 days</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED PRODUCTS -->
+  <div class="section-header">
+    <div>
+      <div class="section-title">Recent products</div>
+      <div class="section-sub">Your latest certification submissions</div>
+    </div>
+    <button class="btn btn-ghost btn-sm">View all →</button>
+  </div>
+  <div class="card-grid">
+    <div class="product-card">
+      <div class="product-card-top">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="product-icon">🧴</div>
+          <div>
+            <div class="product-name">Sunscreen SPF 50+</div>
+            <div class="product-id">OCPB-2026-00089</div>
+          </div>
+        </div>
+        <span class="badge badge-active"><span class="badge-dot"></span>Active</span>
+      </div>
+      <div class="product-divider"></div>
+      <div class="product-meta-row">
+        <span class="product-meta-label">Category</span>
+        <span class="product-meta-value">Personal Care</span>
+      </div>
+      <div class="product-meta-row">
+        <span class="product-meta-label">Certified</span>
+        <span class="product-meta-value">12 Mar 2026</span>
+      </div>
+      <div class="product-meta-row">
+        <span class="product-meta-label">Expires</span>
+        <span class="product-meta-value">12 Mar 2028</span>
+      </div>
+      <div class="product-footer">
+        <button class="btn btn-secondary btn-sm" style="flex:1">View QR</button>
+        <button class="btn btn-primary btn-sm" style="flex:1">Details</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-card-top">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="product-icon">🧼</div>
+          <div>
+            <div class="product-name">Moisturizing Body Wash</div>
+            <div class="product-id">OCPB-2026-00102</div>
+          </div>
+        </div>
+        <span class="badge badge-pending"><span class="badge-dot"></span>Pending</span>
+      </div>
+      <div class="product-divider"></div>
+      <div class="product-meta-row">
+        <span class="product-meta-label">Category</span>
+        <span class="product-meta-value">Personal Care</span>
+      </div>
+      <div class="product-meta-row">
+        <span class="product-meta-label">Submitted</span>
+        <span class="product-meta-value">10 May 2026</span>
+      </div>
+      <div class="product-meta-row">
+        <span class="product-meta-label">Est. review</span>
+        <span class="product-meta-value">13–15 May 2026</span>
+      </div>
+      <div class="product-footer">
+        <button class="btn btn-secondary btn-sm" style="flex:1">Track status</button>
+        <button class="btn btn-ghost btn-sm" style="flex:1">Edit draft</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="section-header">
+    <div>
+      <div class="section-title">All products</div>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active">All (142)</button>
+      <button class="filter-tab">Active</button>
+      <button class="filter-tab">Pending</button>
+      <button class="filter-tab">Expired</button>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-card-header">
+      <input class="input" style="max-width:240px;height:38px;font-size:13px" placeholder="🔍  Search products..." type="search">
+      <button class="btn btn-secondary btn-sm">⬇ Export CSV</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Submitted</th>
+          <th>Expires</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="td-main">Sunscreen SPF 50+</div>
+            <div class="td-sub">OCPB-2026-00089</div>
+          </td>
+          <td class="td-meta">Personal Care</td>
+          <td class="td-meta">12 Mar 2026</td>
+          <td class="td-meta">12 Mar 2028</td>
+          <td><span class="badge badge-active"><span class="badge-dot"></span>Active</span></td>
+          <td><div class="td-actions"><button class="btn btn-ghost btn-sm">View</button></div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="td-main">Moisturizing Body Wash</div>
+            <div class="td-sub">OCPB-2026-00102</div>
+          </td>
+          <td class="td-meta">Personal Care</td>
+          <td class="td-meta">10 May 2026</td>
+          <td class="td-meta">—</td>
+          <td><span class="badge badge-pending"><span class="badge-dot"></span>Pending</span></td>
+          <td><div class="td-actions"><button class="btn btn-ghost btn-sm">Track</button></div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="td-main">Herbal Shampoo Pro</div>
+            <div class="td-sub">OCPB-2025-00741</div>
+          </td>
+          <td class="td-meta">Hair Care</td>
+          <td class="td-meta">3 Jan 2025</td>
+          <td class="td-meta">3 Jan 2027</td>
+          <td><span class="badge badge-active"><span class="badge-dot"></span>Active</span></td>
+          <td><div class="td-actions"><button class="btn btn-ghost btn-sm">View</button></div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="td-main">Brightening Serum V2</div>
+            <div class="td-sub">OCPB-2024-00318</div>
+          </td>
+          <td class="td-meta">Skincare</td>
+          <td class="td-meta">5 Apr 2024</td>
+          <td class="td-meta">5 Apr 2026</td>
+          <td><span class="badge badge-expired">Expired</span></td>
+          <td><div class="td-actions"><button class="btn btn-secondary btn-sm">Renew</button></div></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="td-main">Kids Sunblock SPF 30</div>
+            <div class="td-sub">OCPB-2026-00087</div>
+          </td>
+          <td class="td-meta">Personal Care</td>
+          <td class="td-meta">8 Mar 2026</td>
+          <td class="td-meta">8 Mar 2028</td>
+          <td><span class="badge badge-active"><span class="badge-dot"></span>Active</span></td>
+          <td><div class="td-actions"><button class="btn btn-ghost btn-sm">View</button></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- NEW APPLICATION FORM (Wizard style) -->
+  <div class="section-header" style="margin-top:8px">
+    <div>
+      <div class="section-title">New application</div>
+      <div class="section-sub">Step 2 of 4 — Product details</div>
+    </div>
+  </div>
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Product details</div>
+        <div class="modal-sub">Enter the product information for certification</div>
+      </div>
+      <button class="modal-close" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Stepper -->
+      <div class="stepper">
+        <div class="step done">
+          <div class="step-circle">✓</div>
+          <div class="step-info"><div class="step-label">Business</div></div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step active">
+          <div class="step-circle" aria-current="step">2</div>
+          <div class="step-info"><div class="step-label">Product</div></div>
+        </div>
+        <div class="step-line" style="background:var(--gray-200)"></div>
+        <div class="step">
+          <div class="step-circle">3</div>
+          <div class="step-info"><div class="step-label">Documents</div></div>
+        </div>
+        <div class="step-line" style="background:var(--gray-200)"></div>
+        <div class="step">
+          <div class="step-circle">4</div>
+          <div class="step-info"><div class="step-label">Review</div></div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-title">Application progress</span>
+          <span class="progress-pct">40%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:40%"></div>
+        </div>
+      </div>
+
+      <!-- Alert -->
+      <div class="alert alert-warning">
+        <span class="alert-icon">⚠️</span>
+        <div>
+          <div class="alert-text-title">Lab report required</div>
+          You'll need a certified laboratory test report in step 3.
+        </div>
+      </div>
+
+      <!-- Form fields -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Product name (Thai) <span>*</span></label>
+          <input class="input" type="text" placeholder="ชื่อผลิตภัณฑ์ภาษาไทย">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Product name (English)</label>
+          <input class="input" type="text" placeholder="Product name in English">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Category <span>*</span></label>
+          <input class="input" type="text" value="Personal Care">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Brand name <span>*</span></label>
+          <input class="input error" type="text" value="X" aria-describedby="brand-err">
+          <span class="input-error-msg" id="brand-err">Brand name must be at least 2 characters</span>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Net weight / Volume</label>
+          <input class="input" type="text" placeholder="e.g. 150 ml">
+          <span class="input-hint">Include unit (ml, g, oz)</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country of origin <span>*</span></label>
+          <input class="input" type="text" placeholder="Thailand">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary">← Back</button>
+      <button class="btn btn-primary">Save & continue →</button>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
